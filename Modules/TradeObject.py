@@ -77,7 +77,8 @@ class trade_binance(object):
         #how much is being sold? given that some will be taken off for
         #commission
         self.sellorder=self.client.order_market_sell(symbol=self.currency,
-                                                quantity=self.stake)
+                                                quantity=self.stake,
+                                                newOrderRespType='FULL')
         print('-------SELL COMPLETED-------')                                       
             
         #then record details of sale in the object

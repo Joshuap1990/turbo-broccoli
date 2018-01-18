@@ -27,7 +27,7 @@ client = u.log_on()
 tickers = float(client.get_ticker(symbol='BNBBTC')['lastPrice'])
 balance = client.get_asset_balance(asset='BTC')
 
-trade1=TradeObject.trade_binance(client,'BNBBTC',0.04,0.0013,0.00128)
+trade1=TradeObject.trade_binance(client,'BNBBTC',0.04,0.001282,0.001271)
 
 #Enter a loop updating the price of the ticker - the object should sell itself
 #at the predefined price
@@ -41,9 +41,11 @@ while True:
     print('Latest Price: {}'.format(latest_price))
     trade1.update(latest_price)
     
+    #if asset has been sold then  need to quit the program!
+    '''
     
 '''#sellsell = trade1.sell()
 order = client.order_market_sell(
                         symbol='BNBBTC',
                         quantity=0.04,
-                        newOrderRespType='FULL')'''
+                        newOrderRespType='FULL')
