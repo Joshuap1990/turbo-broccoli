@@ -41,18 +41,17 @@ class trade_binance(object):
         
 
         
-    def update(self):
+    def update(self,price):
         '''
         This method checks the market price of the asset and sells if the price 
         reaches the predefined High or Low sell price
         '''
         
-        #need to test current price!
-        curr_price = float(self.client.get_ticker(symbol=self.currency)['lastPrice'])
-        
         #If price is above/below threshold then sell the asset
-        if curr_price >=self.upperLim or curr_price<=self.lower_lim:
+        if price >=self.upperLim or price<=self.lowerLim:
             self.sell()
+            print(self.sellorder)
+            
        
        
     def buy(self):
