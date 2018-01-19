@@ -17,9 +17,12 @@ from Modules import utils as u
 #STEP 1 - Log In
 client=u.log_on()
 
+#STEP 1b - Choose the base currency that will be used for the exchange
+baseCurrency = 'BTC'
+
 #STEP 2 - Import data from Binance (currencies that are tradable with BTC)
 coinData = DataCollection.retrieve_data_binance(client,
-                                                'BTC',
+                                                baseCurrency,
                                                 Client.KLINE_INTERVAL_30MINUTE,
                                                 '1 day ago UTC')
                                                 

@@ -16,13 +16,15 @@ import time
 #STEP 1 - Log In
 client = u.log_on()
 
+#Choose your base currency for the exchange
+basecurrency='BTC'
 
 
 # check the price and make the trade    
 tickers = float(client.get_ticker(symbol='BNBBTC')['lastPrice'])
 balance = client.get_asset_balance(asset='BTC')
 
-trade1=TradeObject.trade_binance(client,'BNBBTC',0.03,0.0013,0.001287)
+trade1=TradeObject.trade_binance(client,baseCurr,'BNBBTC',0.03,0.0013,0.001287)
 
 
 
