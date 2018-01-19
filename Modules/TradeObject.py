@@ -24,6 +24,7 @@ class trade_binance(object):
         '''
         These functions run on trade object initialization
         '''
+        
         #assign the parameters to object attributes
         self.client=client             #log on details
         self.currency=currency         #the asset being traded e.g 'BNBBTC'
@@ -59,14 +60,23 @@ class trade_binance(object):
         This method does error checks and performs the buy order
         '''
                 
-        #ERROR CHECKS NEEDED! MAYBE A TRY/EXCEPT STATEMENT
         #need to check account balance before buying anything!
-        
-        self.buyorder = self.client.order_market_buy(
-                        symbol=self.currency,
-                        quantity=self.stake,
-                        newOrderRespType='FULL')
-                        
+        try:
+            self.buyorder = self.client.order_market_buy(
+                            symbol=self.currency,
+                            quantity=self.stake,
+                            newOrderRespType='FULL')
+        except:
+            #server may have timed out, give it one more try
+            print('WARNING - Server is not responsive...about to try again')
+            self.buyorder = self.client.order_market_buy(
+                            symbol=self.currency,
+                            quantity=self.stake,
+                            newOrderRespType='FULL')
+                            
+         # Initialise an empty sell order dictionary - this will be overwritten
+         # when the product is actually sold
+        self.sellorder={}
                         
     def sell(self):
         '''
@@ -76,14 +86,28 @@ class trade_binance(object):
         
         #how much is being sold? given that some will be taken off for
         #commission
-        self.sellorder=self.client.order_market_sell(symbol=self.currency,
-                                                quantity=self.stake,
-                                                newOrderRespType='FULL')
-        print('-------SELL COMPLETED-------')                                       
-            
+        try:
+            self.sellorder=self.client.order_market_sell(symbol=self.currency,
+                                                         quantity=self.stake,
+                                                         newOrderRespType='FULL')
+            print('-------SELL COMPLETED-------')
+        except:
+            #need to change this except statement only for a timeout error
+            #replace this warning message with a warning from the warning module
+            print('WARNING - Server is not responsive...about to try again')
+            self.sellorder=self.client.order_market_sell(symbol=self.currency,
+                                                         quantity=self.stake,
+                                                         newOrderRespType='FULL')
+            print('-------SELL COMPLETED-------')                                       
+        
         #then record details of sale in the object
          #print out details to console?   
-        
+     
+    def check_balance(self,client):
+        #need to check the balance of the base currency before
+        #trying to buy anything. if balance is not enough exit the code and
+        #deactivate the object
+        a=stuff
 
     def profitcalc(self):
         '''
