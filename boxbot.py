@@ -6,10 +6,7 @@ An automated method of trading cryptocurrencies on Binance
 
 Author: Joshua Parkinson
 """
-import numpy as np
-import pandas as pd
 from binance.client import Client
-from pandas import DataFrame
 from Modules import DataCollection, TradeObject, DataProcessing
 from Modules import utils as u
 
