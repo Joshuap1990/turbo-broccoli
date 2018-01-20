@@ -27,6 +27,7 @@ def retrieve_data_binance(client,base_coin,interval,timespan):
     from pandas import DataFrame
     import pandas as pd
     import numpy as np
+    import datetime as dt
 
     tickers=[]
     prices = client.get_all_tickers()
@@ -44,5 +45,7 @@ def retrieve_data_binance(client,base_coin,interval,timespan):
                                                        timespan))
         #a lot of the data is a str - convert to float for 
         # further processing                                               
-        allData[ticker]= data.astype(float)                                                            
+        allData[ticker]=data.astype(float)
+        
+                                                                    
     return allData
