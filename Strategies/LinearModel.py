@@ -81,5 +81,16 @@ def model(asset):
         
         [[asset1,stake1,highsell1,lowsell1],
         [asset2,stake2,highsell2,lowsell2]]
+        
+        
+        Logic in this decision model
+        1)rank by gradient
+        2.)re-rank by which current values are lower than the mean
+        3.)this model will work by fixed stake for now, so need to figure out
+            how many assets can be bought 
+        4.) if we have enough money for 5 assets the top five ranked assets
+            will be output as a recommendation
+            
         '''
+        put_stuff_here
         
