@@ -34,32 +34,18 @@ idata = np.random.random(TEST_LEN)
 
 def func_example():
     odata = talib.MA(idata)
-    macd, macdsignal, macdhist = talib.MACD(idata)
-    plot(odata, macd, macdsignal, macdhist)
+    macd, macdsignal, macdhist = talib.MACD(idata, fastperiod=12, slowperiod=26, signalperiod=9)
+    real = talib.RSI(idata, timeperiod=14)
+    plot(odata, macd, macdsignal, macdhist, real)
+ 
 
-#def abstract_example():
-#    sma = Function('sma')
-#    input_arrays = sma.get_input_arrays()
-#    for key in input_arrays.keys():
-#        input_arrays[key] = idata
-#    sma.set_input_arrays(input_arrays)
-#    odata = sma(30) # timePeriod=30, specified as an arg
-#
-#    macd = Function('macd', input_arrays)
-#    macd.parameters = {
-#        'slowperiod': 26,
-#        'fastperiod': 12,
-#        'signal': 9
-#    }
-#    macd, macdsignal, macdhist = macd() # multiple output values unpacked (these will always have the correct order)
-#    plot(odata, macd, macdsignal, macdhist)
-
-def plot(odata, macd, macdsignal, macdhist):
+def plot(odata, macd, macdsignal, macdhist, real):
     pylab.plot(r, idata, 'b-', label="original")
     pylab.plot(r, odata, 'g-', label='MA')
     pylab.plot(r, macd, 'r-', label='MACD')
-    pylab.plot(r, macdsignal, 'r-', label='macdsignal')
-    pylab.plot(r, macdhist, 'r-', label ='macdhist')
+    pylab.plot(r, macdsignal, 'g-', label='macdsignal')
+    pylab.plot(r, macdhist, 'b-', label ='macdhist')
+    pylab.plot(r, real, 'g-', label='rsi')
     pylab.legend()
     pylab.show()
 
@@ -71,4 +57,23 @@ if __name__ == '__main__':
     else:
         print('Using talib.abstract')
         abstract_example()
+
+#define strategy advice
+        #set amcd thresholds
+        #macd up = 0.025, if uptrend is above a certain threshold.
+        #macd down = -0.025 if downtrend is below certain threshold
+        #persistence = 1, how many data points indicate a slid trend.
+
+        #if macd is above threshold then advice buy
+        # if macd is below threshold then advice sell
+
+        #if RSI is above 70 then advice overbought
+        #if RSI is below 30 then advice oversold
+
+        #if RSI is below 30 and MACD is above threshold up, then strong buy advice
+        #if RSI is above 70 and MACD is below threshold downm then strong sell advice
+
+        #if MACD is neither above or below thresholds and 30<RSI<70 , then sidewards trend
+        #do nothing, hold position. 
+        
 
