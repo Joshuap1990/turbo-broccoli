@@ -13,7 +13,7 @@ from Strategies import LinearModel as model
 
 
 #STEP 1 - Log In
-client=u.log_on()
+client=u.log_on(150)
 
 #STEP 1b - Choose the base currency that will be used for the exchange
 baseCurrency = 'BTC'
@@ -22,7 +22,7 @@ baseCurrency = 'BTC'
 coinData = DataCollection.retrieve_data_binance(client,
                                                 baseCurrency,
                                                 Client.KLINE_INTERVAL_5MINUTE,
-                                                '1 days ago UTC')
+                                                '1 day ago UTC')
                                                 
 #STEP 3 - Sort and Characterise the data - adding other data if required to 
 #         produce the 'fullData' dictionary which the model can operate on
@@ -43,32 +43,7 @@ assetlist=model.decision(predictionData)
 #STEP 6 - Buy the coins using the tradeobject class
 activetrades=[]
 
-for asset in assetlist:
-    activetrades.append(TradeObject(asset,stake,hiprice,lowprice))
-
+'''for asset in assetlist:
+    activetrades.append(TradeObject(asset,stake,hiprice,lowprice))'''
 
 #STEP 7 - Enter a loop to monitor and update the trade objects, ready to sell
-While True:
-    a=0
-while True:
-    time.sleep(5)
-    a=a+1
-    print('About the check the price...')
-    print('Check Number {}'.format(a))
-    
-    
-    #Try and get the latest price from the server
-    try:
-        latest_price = float(client.get_ticker(symbol='BNBBTC')['lastPrice'])
-        print('Latest Price: {}'.format(latest_price))
-    except:
-        print('WARNING- Check Number {} may have timed out...trying again')
-        latest_price = float(client.get_ticker(symbol='BNBBTC')['lastPrice'])
-        print('Latest Price: {}'.format(latest_price))
-        
-    # Update the trade objects    
-    trade1.update(latest_price)
-    
-    #if asset has been sold then  need to quit the program!
-    if len(trade1.sellorder.keys())>1:
-        break

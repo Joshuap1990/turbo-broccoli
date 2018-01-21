@@ -44,7 +44,7 @@ class trade_binance(object):
         
         #Check the amount of base currencty in your account to ensure that
          #there is enough to make the trade
-        balance = client.get_asset_balance(asset='BTC')
+        balance = client.get_asset_balance(asset=baseCurr)
         
         #Estimate how much is needed to make the trade, at the current
         #market price 

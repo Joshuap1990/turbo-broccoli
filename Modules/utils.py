@@ -8,7 +8,7 @@ and are solely in support of the program
 """
 
 
-def log_on():
+def log_on(timeout):
     # ======== Select a file for opening:
     #file only needs to lines, the first line with API, second with secret
     import Tkinter,tkFileDialog
@@ -26,6 +26,7 @@ def log_on():
     
     client = Client(APIdata,
                     secretdata,
-                    {"timeout": 150})
+                    {"timeout": timeout})
+    print('Logged In Successfully')
     
     return client
