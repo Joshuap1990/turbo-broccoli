@@ -58,3 +58,4 @@ if __name__ == '__main__':
     else:
         print('Using talib.abstract')
         abstract_example()
+        
