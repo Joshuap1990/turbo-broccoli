@@ -13,13 +13,14 @@ from Strategies import LinearModel as model
 
 
 #STEP 1 - Log In
-client=u.log_on(9999)
+client=u.log_on(150)
 
 #STEP 1b - Choose the base currency that will be used for the exchange
 baseCurrency = 'BTC'
 minimumStake = 15       #minimum Stake in USD to put in each crypto
 
 
+'''
 activetrades=[]
 #Enter the loop
 while True:
@@ -48,13 +49,17 @@ while True:
     buyholdsell=model.decision(predictionData)
     
     #get current market price for all assets
+    prices=u.get_prices(client)
     
     #update the active trade objects to see if any need to be sold
     
     if len(activetrades)>0:
         for trade in activetrades:
-            trade.update()
-            
+            trade.update(buyholdsell)
+        
+            #need to remove item from list if it has been sold
+            if trade.status=='INACTIVE':
+                activetrades.remove(trade)
             
             
         
@@ -63,19 +68,34 @@ while True:
         
     for index,row in buyholdsell.iterrows():
         
-        if row['recommendation']=='BUY':
-            #Get current price of that asset to figure out approximate price
-            #of bitcoin to spend
+        #Get current price of that asset to figure out approximate price
+        #of bitcoin to spend
+        bitcoinStake = minimumStake/prices['BTCUSDT']
         
-            #check current bitcoin balance to see if we have enough with margin
-            balance = client.get_asset_balance(asset=baseCurrency)
+        #check current bitcoin balance to see if we have enough with margin
+        balance = client.get_asset_balance(asset=baseCurrency)
+        
+        #Estimate what volume of asset to buy with the bitcoin
+        estVolume = bitcoinStake/prices[index]
             
-            if row['recommendation']=='SELL':
+        if balance > 1.05*bitcoinStake:
+                    
+        
+            if row['recommendation']=='BUY':
+                #Get current price of that asset to figure out approximate price
+                #of bitcoin to spend
+                bitcoinStake = minimumStake/prices['BTCUSDT']
+        
+                #check current bitcoin balance to see if we have enough with margin
+                balance = client.get_asset_balance(asset=baseCurrency)
+            
+            
+            elif row['recommendation']=='SELL':
                 #we have reached the sell portion so there is no need to keep
                 #on looping through
-                continue
+                break
             
         
 
 
-
+'''

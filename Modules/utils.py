@@ -30,3 +30,18 @@ def log_on(timeout):
     print('Logged In Successfully')
     
     return client
+
+
+def get_prices(client):
+    '''
+    This function is to take the default output of the get_ticker
+    method in the defauly API and turn it into something more useful
+    '''
+    raw_price = client.get_all_tickers()
+    
+    processed_price = {}
+    for asset in raw_price:
+        
+        processed_price[asset['symbol']]=asset['price']
+        
+    return processed_price

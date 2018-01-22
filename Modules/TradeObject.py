@@ -55,10 +55,11 @@ class trade_binance(object):
             self.buy()
             print('-------BUY COMPLETED-------')
             print(self.buyorder)
+            self.status='ACTIVE'
         
 
         
-    def update(self,price):
+    def update(self,buyholdsell):
         '''
         This method checks the market price of the asset and sells if the price 
         reaches the predefined High or Low sell price
@@ -66,7 +67,7 @@ class trade_binance(object):
         #1 - go to the decision model to get buy/sell recommendations
         # Depending on Buy-Sell recommendation then either do nothing, or sell
         
-        if buyholdsell[self.asset]['recommendation']=='SELL':
+        if buyholdsell['recommendation'][self.asset]=='SELL':
             self.sell()
             
             
@@ -116,6 +117,7 @@ class trade_binance(object):
                                                          newOrderRespType='FULL')
             print('-------SELL COMPLETED-------')                                       
         
+        self.status='INACTIVE'
         #then record details of sale in the object
          #print out details to console?   
      

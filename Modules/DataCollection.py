@@ -43,6 +43,7 @@ def retrieve_data_binance(client,base_coin,interval,timespan):
         data=pd.DataFrame(client.get_historical_klines(ticker,
                                                        interval,
                                                        timespan))
+        print('Data for {} retrieved'.format(ticker))
         #a lot of the data is a str - convert to float for 
         # further processing                                               
         allData[ticker]=data.astype(float)
