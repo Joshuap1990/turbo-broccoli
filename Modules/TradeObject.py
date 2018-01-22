@@ -20,15 +20,12 @@ class trade_binance(object):
                 instead of GBP/USD
     asset       - what trading pair being bought/sold?
     volume      - how much of the currency is going to be bought?
-    buyPrice    - What price should it be bought at?
-    upperLim    - if the price reaches this upper value, then it should be sold
-    lowerLim    - if the price reaches this low value, then it should be sold
     '''
     
     import pandas as pd
     from binance.client import Client
     
-    def __init__(self,client,baseCurr,asset,volume,currPrice,upperLim,lowerLim):
+    def __init__(self,client,baseCurr,asset,volume,currPrice):
         '''
         These functions run on trade object initialization
         '''
@@ -37,11 +34,12 @@ class trade_binance(object):
         self.client=client             #log on details
         self.asset=asset            #the asset being traded e.g 'BNBBTC'
         self.volume=volume               #how much of the thing to buy?
-        self.upperLim=upperLim         # what is the upper price?
-        self.lowerLim=lowerLim         #what is the lower price?
         
-        ###ERROR CHECKS NEEDED!!!!!!
         
+        #--------------------------------------------------------------------
+        #                        Pre-Buy Checks
+        #--------------------------------------------------------------------
+
         #Check the amount of base currencty in your account to ensure that
          #there is enough to make the trade
         balance = client.get_asset_balance(asset=baseCurr)
@@ -65,20 +63,20 @@ class trade_binance(object):
         This method checks the market price of the asset and sells if the price 
         reaches the predefined High or Low sell price
         '''
+        #1 - go to the decision model to get buy/sell recommendations
+        # Depending on Buy-Sell recommendation then either do nothing, or sell
         
-        #If price is above/below threshold then sell the asset
-        if price >=self.upperLim or price<=self.lowerLim:
+        if buyholdsell[self.asset]['recommendation']=='SELL':
             self.sell()
-            print(self.sellorder)
+            
             
        
        
     def buy(self):
         '''
-        This method does error checks and performs the buy order
+        This method performs the buy order
         '''
                 
-        #need to check account balance before buying anything!
         try:
             self.buyorder = self.client.order_market_buy(
                             symbol=self.asset,

@@ -13,37 +13,69 @@ from Strategies import LinearModel as model
 
 
 #STEP 1 - Log In
-client=u.log_on(150)
+client=u.log_on(9999)
 
 #STEP 1b - Choose the base currency that will be used for the exchange
 baseCurrency = 'BTC'
+minimumStake = 15       #minimum Stake in USD to put in each crypto
 
-#STEP 2 - Import data from Binance (currencies that are tradable with BTC)
-coinData = DataCollection.retrieve_data_binance(client,
+
+activetrades=[]
+#Enter the loop
+while True:
+
+
+    #STEP 2 - Import data from Binance (currencies that are tradable with BTC)
+    coinData = DataCollection.retrieve_data_binance(client,
                                                 baseCurrency,
                                                 Client.KLINE_INTERVAL_5MINUTE,
-                                                '1 day ago UTC')
+                                                '1 hour ago UTC')
                                                 
-#STEP 3 - Sort and Characterise the data - adding other data if required to 
-#         produce the 'fullData' dictionary which the model can operate on
+    #STEP 3 - Sort and Characterise the data - adding other data if required to 
+    #         produce the 'fullData' dictionary which the model can operate on
                                                 
-fullData = DataProcessing.produce_summary(coinData)
+    fullData = DataProcessing.produce_summary(coinData)
                                                 
 
-#STEP 4 - The predictive model needs to give forcasts (and probability)
-#           for each coin
+    #STEP 4 - The predictive model needs to give forcasts (and probability)
+    #           for each coin
 
-predictionData = model.model_control(fullData)
+    predictionData = model.model_control(fullData)
 
-#STEP 5 - The decision model needs to produce a list of coins, stakes and
-#           prices based on the forecast
+    #STEP 5 - The decision model needs to produce a list of coins, stakes and
+    #           prices based on the forecast
 
-assetlist=model.decision(predictionData)
+    buyholdsell=model.decision(predictionData)
+    
+    #get current market price for all assets
+    
+    #update the active trade objects to see if any need to be sold
+    
+    if len(activetrades)>0:
+        for trade in activetrades:
+            trade.update()
+            
+            
+            
+        
+    #Loop through current trade recommendations to see if any money can be
+    # re-invested
+        
+    for index,row in buyholdsell.iterrows():
+        
+        if row['recommendation']=='BUY':
+            #Get current price of that asset to figure out approximate price
+            #of bitcoin to spend
+        
+            #check current bitcoin balance to see if we have enough with margin
+            balance = client.get_asset_balance(asset=baseCurrency)
+            
+            if row['recommendation']=='SELL':
+                #we have reached the sell portion so there is no need to keep
+                #on looping through
+                continue
+            
+        
 
-#STEP 6 - Buy the coins using the tradeobject class
-activetrades=[]
 
-'''for asset in assetlist:
-    activetrades.append(TradeObject(asset,stake,hiprice,lowprice))'''
 
-#STEP 7 - Enter a loop to monitor and update the trade objects, ready to sell
