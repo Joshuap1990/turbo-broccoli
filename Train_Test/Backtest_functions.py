@@ -6,6 +6,7 @@ Retrieve Training Data from various sources
 
 def import_data():
     import pandas as pd
+    import glob
     #Create a dictionary for importing all of the training data
     testData = {}
 
