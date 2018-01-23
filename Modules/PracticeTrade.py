@@ -27,7 +27,6 @@ class trade_practice(object):
         '''
         
         #assign the parameters to object attributes
-        self.client=client             #log on details
         self.asset=asset            #the asset being traded e.g 'BNBBTC'
         self.volume=volume               #how much of the thing to buy?
         
@@ -37,7 +36,7 @@ class trade_practice(object):
         #--------------------------------------------------------------------
 
         
-        if balance >= 1.05*reqBalance: 
+        if balance >= minstake: 
             #buy the stock!
             self.buy()
             print('-------BUY COMPLETED-------')
