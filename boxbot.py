@@ -17,11 +17,11 @@ client=u.log_on(150)
 
 #STEP 1b - Choose the base currency that will be used for the exchange
 baseCurrency = 'BTC'
-minimumStake = 15       #minimum Stake in USD to put in each crypto
+minimumStake = 15           #minimum Stake in USD to put in each crypto
+
+activetrades=[]             #an empty list where active trades will be stored
 
 
-
-activetrades=[]
 #Enter the loop
 while True:
 

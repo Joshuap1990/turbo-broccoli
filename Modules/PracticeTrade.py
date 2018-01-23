@@ -7,45 +7,70 @@ This class creates objects that will be used to make practice trades
 
 """
 
+class wallet(object):
+    
+    def __init__(self,open_balance):
+        self.balance=open_balance
+    
+    def spend(amount):
+        
+        if amount>self.balance:
+            raise ValueError ('Not enough bitcoin to conduct transaction')
+        
+        self.balance = self.balance-amount
+
+    def deposit(amount):
+        self.balance=self.balance
+        
+    def balance():
+        return self.balance
+
+
 class trade_practice(object):
     '''
-    Trade Class
+    Practice Trade Class
     
-    client      - the log on details for you account
-    baseCurr    - the currency that will be used as the trading currency
-                instead of GBP/USD
-    asset       - what trading pair being bought/sold?
-    volume      - how much of the currency is going to be bought?
+    Interacts with the wallet
     '''
     
     import pandas as pd
-    from binance.client import Client
     
-    def __init__(self,asset,volume,currPrice):
+    def __init__(self,asset,fullPrice,wallet):
         '''
         These functions run on trade object initialization
         '''
         
         #assign the parameters to object attributes
-        self.asset=asset            #the asset being traded e.g 'BNBBTC'
-        self.volume=volume               #how much of the thing to buy?
-        
-        
-        #--------------------------------------------------------------------
-        #                        Pre-Buy Checks
-        #--------------------------------------------------------------------
+        self.asset=asset                    # the name of the asset being bought
+        self.wallet=wallet
+        self.buy(fullprice)
+        self.status='ACTIVE'
 
+    def buy(self,fullPrice,bitcoinbalance):
+            
+        currentprice = fullPrice[self.asset].tail(1)['4']
         
-        if balance >= minstake: 
-            #buy the stock!
-            self.buy()
-            print('-------BUY COMPLETED-------')
-            print(self.buyorder)
-            self.status='ACTIVE'
+        #calculate how much of the asset is being bough
+        self.volume=bitcoinbalance/currentprice
         
-
+        self.wallet.spend(bitcoinbalance)
         
-    def update(self,buyholdsell):
+                        
+    def sell(self,fullPrice):
+        '''
+        This method makes the sale then deactivates the object
+        based on if it has hit the high or low sell price
+        '''
+        
+        currentprice = fullPrice[self.asset].tail(1)['4']                     
+        self.sellprice=currentprice
+        self.status='INACTIVE'
+        
+        #deposit back in the wallet
+        self.returned=self.volume*currentprice
+        self.wallet.deposit(self.returned)
+        
+    def update(self,buyholdsell,fullPrice):
         '''
         This method checks the market price of the asset and sells if the price 
         reaches the predefined High or Low sell price
@@ -54,36 +79,6 @@ class trade_practice(object):
         # Depending on Buy-Sell recommendation then either do nothing, or sell
         
         if buyholdsell['recommendation'][self.asset]=='SELL':
-            self.sell()
+            self.sell(fullPrice)
             
-            
-       
-       
-    def buy(self):
-        '''
-        This method performs the buy order
-        '''
-                
-                            
-         # Initialise an empty sell order dictionary - this will be overwritten
-         # when the product is actually sold
-        self.sellorder={}
-                        
-    def sell(self):
-        '''
-        This method makes the sale then deactivates the object
-        based on if it has hit the high or low sell price
-        '''
-                              
-        
-        self.status='INACTIVE'
-        #then record details of sale in the object
-         #print out details to console?   
-     
 
-    def profitcalc(self):
-        '''
-        once the sale is complete calculate profit for this trade
-        '''
-        self.profit=put_stuff_here
-        
