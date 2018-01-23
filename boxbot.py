@@ -20,7 +20,7 @@ baseCurrency = 'BTC'
 minimumStake = 15       #minimum Stake in USD to put in each crypto
 
 
-'''
+
 activetrades=[]
 #Enter the loop
 while True:
@@ -97,5 +97,3 @@ while True:
             
         
 
-
-'''
