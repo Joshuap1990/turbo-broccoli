@@ -15,7 +15,7 @@ def model_control(fullData):
     predictionData={}
     
     for asset in fullData.keys():
-        print('Processing model - {}'.format(asset))
+        #print('Processing model - {}'.format(asset))
         predictionData[asset]={}
         predictionData[asset]['gradient']=model(fullData[asset])
         
@@ -29,7 +29,7 @@ def model(asset):
     make linear fit of data
     '''
     from scipy import stats
-    slope, intercept, r_value, p_value, std_err =stats.linregress(asset['history'][4],asset['history'][6])
+    slope, intercept, r_value, p_value, std_err =stats.linregress(asset['history']['endtime'],asset['history']['close'])
     
     return slope
     

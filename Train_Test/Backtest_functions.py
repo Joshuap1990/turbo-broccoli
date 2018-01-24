@@ -32,7 +32,7 @@ def calculate_portfolio(wallet,activetrades):
         activebitcoin=activebitcoin+trade.bitcoin
         
     #add the active bitcoin to the bitcoin in the wallet
-    total_bitcoin=activebitcoin+wallet.balance
+    total_bitcoin = activebitcoin+wallet.balance
     
     return total_bitcoin
     

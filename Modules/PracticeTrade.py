@@ -17,10 +17,10 @@ class wallet(object):
         if amount>self.balance:
             raise ValueError ('Not enough bitcoin to conduct transaction')
         
-        self.balance = self.balance-amount
+        self.balance = self.balance-float(amount)
 
     def deposit(self,amount):
-        self.balance=self.balance
+        self.balance=self.balance+float(amount)
         
 
 
@@ -51,7 +51,7 @@ class trade_practice(object):
 
     def buy(self,fullPrice):
             
-        currentprice = fullPrice[self.asset].tail(1)['4']
+        currentprice = fullPrice[self.asset]['history'].tail(1)['close'].values[0]
         
         # Pretend Sale - get the volume of asset that could be bought with
         # that amount of bitcoin
@@ -66,12 +66,19 @@ class trade_practice(object):
         based on if it has hit the high or low sell price
         '''
         
-        currentprice = fullPrice[self.asset].tail(1)['4']                     
-
+        currentprice = fullPrice[self.asset]['history'].tail(1)['close'].values[0]                    
+        
+        
+        #for debugging purposes
+        print('-----------NEW SALE-----------')
+        print('ASSET - {}'.format(self.asset))
+        print('VOLUME - {}'.format(self.volume))
+        print('CURRENT PRICE - {}'.format(currentprice))
+        print('ESTIMATED BITCOIN - {}'.format(self.volume*currentprice))
         #calculate the amount of bitcoin that can be returned to the wallet
-        self.bitcoin = self.volume/currentprice
+        self.bitcoin = self.volume*currentprice
         #deposit back in the wallet
-        self.wallet.deposit(self.returned)
+        self.wallet.deposit(self.bitcoin)
         self.status='INACTIVE'
         
 

@@ -13,7 +13,7 @@ testData = backtest.import_data()
 
 
 maxlen=8904
-numrows =13                             #for a 5 minute frequency, what is
+numrows =50                            #for a 5 minute frequency, what is
                                         #the number of rows that are 
                                         #required to capture 1h data
 
@@ -24,7 +24,7 @@ portfolio=[]                            #create a list to store the full value
                                         # of the portfolio
 
 myWallet=PracticeTrade.wallet(0.5)      #start life with half a bitcoin
-tradestake = 0.05                       #how much bitcoin to spend each transaction
+tradestake = 0.1                       #how much bitcoin to spend each transaction
 
 
 #iterate through the whole dataset, frame by frame
@@ -38,6 +38,7 @@ for number in range(1,(maxlen-numrows)):
     for asset in testData.keys():
             
         current_data[asset]=testData[asset].iloc[range(number,(number+numrows))]
+        current_data[asset].columns=['starttime','open','high','low','close','volume','endtime','data1','data2','data3','data4','data5']
         
     #---------------------------------------------------------
     #      Backtest the data held in current_data
@@ -75,9 +76,9 @@ for number in range(1,(maxlen-numrows)):
         
         
         #check current bitcoin balance to see if we have enough with margin
-        balance = myWallet.balance()
+        balance = float(myWallet.balance)
                     
-        if balance >= tradestake:
+        if balance > tradestake:
                     
         
             if row['recommendation']=='BUY':
@@ -86,7 +87,8 @@ for number in range(1,(maxlen-numrows)):
                 # trade list
                 activetrades.append(PracticeTrade.trade_practice(index,
                                                                  fullData,
-                                                                 myWallet))
+                                                                 myWallet,
+                                                                 tradestake))
             elif row['recommendation']=='SELL':
                 #we have reached the sell portion so there is no need to keep
                 #on looping through
@@ -97,7 +99,7 @@ for number in range(1,(maxlen-numrows)):
     #------------------------------------------------------
     
     portfolio.append(backtest.calculate_portfolio(myWallet,activetrades))
- 
+    print('current balance    ',portfolio[-1])
 #deposit everything back in the wallet           
 for trade in activetrades:
     trade.sell(fullData)
