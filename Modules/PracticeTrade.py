@@ -12,18 +12,17 @@ class wallet(object):
     def __init__(self,open_balance):
         self.balance=open_balance
     
-    def spend(amount):
+    def spend(self,amount):
         
         if amount>self.balance:
             raise ValueError ('Not enough bitcoin to conduct transaction')
         
         self.balance = self.balance-amount
 
-    def deposit(amount):
+    def deposit(self,amount):
         self.balance=self.balance
         
-    def balance():
-        return self.balance
+
 
 
 class trade_practice(object):
@@ -35,25 +34,30 @@ class trade_practice(object):
     
     import pandas as pd
     
-    def __init__(self,asset,fullPrice,wallet):
+    def __init__(self,asset,fullPrice,wallet,stake):
         '''
         These functions run on trade object initialization
         '''
         
         #assign the parameters to object attributes
         self.asset=asset                    # the name of the asset being bought
-        self.wallet=wallet
-        self.buy(fullprice)
+        self.wallet=wallet                  # embed the wallet in the object so
+                                            #  it can deposit/withdraw from it
+        self.bitcoin = stake                # keep track of how much bitcoin
+                                            #  is 'locked up' in this trade 
+        self.buy(fullPrice)                 # Go buy the asset using the amount of
+                                            #   bitcoin in the object
         self.status='ACTIVE'
 
-    def buy(self,fullPrice,bitcoinbalance):
+    def buy(self,fullPrice):
             
         currentprice = fullPrice[self.asset].tail(1)['4']
         
-        #calculate how much of the asset is being bough
-        self.volume=bitcoinbalance/currentprice
+        # Pretend Sale - get the volume of asset that could be bought with
+        # that amount of bitcoin
+        self.volume=self.bitcoin/currentprice
         
-        self.wallet.spend(bitcoinbalance)
+        self.wallet.spend(self.bitcoin)
         
                         
     def sell(self,fullPrice):
@@ -63,12 +67,15 @@ class trade_practice(object):
         '''
         
         currentprice = fullPrice[self.asset].tail(1)['4']                     
-        self.sellprice=currentprice
+
+        #calculate the amount of bitcoin that can be returned to the wallet
+        self.bitcoin = self.volume/currentprice
+        #deposit back in the wallet
+        self.wallet.deposit(self.returned)
         self.status='INACTIVE'
         
-        #deposit back in the wallet
-        self.returned=self.volume*currentprice
-        self.wallet.deposit(self.returned)
+
+        
         
     def update(self,buyholdsell,fullPrice):
         '''

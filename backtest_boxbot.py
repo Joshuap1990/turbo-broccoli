@@ -13,9 +13,15 @@ testData = backtest.import_data()
 
 
 maxlen=8904
-numrows =13
+numrows =13                             #for a 5 minute frequency, what is
+                                        #the number of rows that are 
+                                        #required to capture 1h data
 
-activetrades=[]
+activetrades=[]                         # Start an empty list to capture active
+                                        #trades
+
+portfolio=[]                            #create a list to store the full value
+                                        # of the portfolio
 
 myWallet=PracticeTrade.wallet(0.5)      #start life with half a bitcoin
 tradestake = 0.05                       #how much bitcoin to spend each transaction
@@ -75,15 +81,22 @@ for number in range(1,(maxlen-numrows)):
                     
         
             if row['recommendation']=='BUY':
-                                
-                activetrades.append(PracticeTrade.trade_practice(index,fullData,myWallet)
-                
-            
-            
+                 
+                #create a new trade object and add it to the active 
+                # trade list
+                activetrades.append(PracticeTrade.trade_practice(index,
+                                                                 fullData,
+                                                                 myWallet))
             elif row['recommendation']=='SELL':
                 #we have reached the sell portion so there is no need to keep
                 #on looping through
                 break
+            
+    #------------------------------------------------------
+    # Report current bitcoin balance
+    #------------------------------------------------------
+    
+    portfolio.append(backtest.calculate_portfolio(myWallet,activetrades))
  
 #deposit everything back in the wallet           
 for trade in activetrades:
